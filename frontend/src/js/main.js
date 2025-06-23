@@ -1,6 +1,6 @@
-import '../css/style.css';
+/*import '../css/style.css';*/
 
-const MOCK_MODE = true;
+const MOCK_MODE = false;
 
 async function upload() {
   const fileInput = document.querySelector('input[type="file"]');
@@ -34,9 +34,10 @@ async function upload() {
 
   const formData = new FormData();
   formData.append('file', file);
+  /*formData.append("request",["email", "name"])*/
 
   try {
-    const response = await fetch('http://localhost:8000/upload', {
+    const response = await fetch('http://localhost:8000/parse-cv', {
       method: 'POST',
       body: formData,
     });
@@ -46,7 +47,8 @@ async function upload() {
     }
 
     const data = await response.json();
-    displayParsedCV(data);
+    const pureJsonString = ((data["extracted_data"])["response"]).replace(/^```json\s*/, '') .replace(/\s*```$/, '');    
+    displayParsedCV(JSON.parse(pureJsonString));
   } catch (error) {
     console.error(error);
     alert('An error occurred while uploading the file');
@@ -62,7 +64,7 @@ function displayParsedCV(data) {
     <h2>${data.name}</h2>
     <p>Email: ${data.email}</p>
     <p>Experience: ${data.experience}</p>
-    <p>Skills: ${data.skills.join(', ')}</p>
+    <p>${(data["skills"]).join(", ")}</p>
   `;
 }
 
