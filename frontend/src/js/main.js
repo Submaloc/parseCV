@@ -1,4 +1,4 @@
-/*import '../css/style.css';*/
+import '../css/style.css';
 
 const MOCK_MODE = false;
 
