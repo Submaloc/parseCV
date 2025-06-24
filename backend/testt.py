@@ -1,4 +1,3 @@
-
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel
 import pdfplumber
@@ -6,6 +5,10 @@ import docx
 from fastapi import FastAPI, UploadFile, File, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 import requests
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 class Settings(BaseSettings):
     ollama_host: str = "http://localhost:11434/api/generate"
@@ -123,3 +126,14 @@ async def parse_cv(file: UploadFile = File(),request: list[str] | None = None
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error processing CV: {str(e)}"
         )
+
+
+app.mount(
+    "/static",
+    StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True),
+    name="static"
+)
+
+@app.get("/", include_in_schema=False)
+async def serve_index():
+    return FileResponse(os.path.join(os.path.dirname(__file__), "static", "index.html"))
