@@ -4,7 +4,7 @@
 * `cd frontend`
 
 * `npm run build`
-## To run the application, enter the command 
+## To run the application, enter the command: 
 * fastapi dev "path to file"
 
 * `fastapi dev backend/cvParser.py`
@@ -12,7 +12,7 @@
 ## For Vite:
 [Vite](https://vite.dev/) - link to site Vite
 
-### Terminal command
+### Terminal command:
 
 * `npm create vite@latest`
 
@@ -20,7 +20,7 @@
 ## For Tailwind:
 [Tailwindcss](https://tailwindcss.com/) - link to site Tailwindcss
 
-### Terminal command
+### Terminal command:
 
 * `npm install -D tailwindcss@3 postcss autoprefixer`
 
