@@ -34,7 +34,6 @@ async function upload() {
 
   const formData = new FormData();
   formData.append('file', file);
-  /*formData.append("request",["email", "name"])*/
 
   try {
     const response = await fetch('http://localhost:8000/parse-cv', {
@@ -47,7 +46,9 @@ async function upload() {
     }
 
     const data = await response.json();
-    const pureJsonString = ((data["extracted_data"])["response"]).replace(/^```json\s*/, '') .replace(/\s*```$/, '');    
+    const pureJsonString = ((data["extracted_data"])["response"])
+      .replace(/^```json\s*/, '')
+      .replace(/\s*```$/, '');
     displayParsedCV(JSON.parse(pureJsonString));
   } catch (error) {
     console.error(error);
@@ -60,11 +61,20 @@ async function upload() {
 
 function displayParsedCV(data) {
   const infoBox = document.getElementById('info-cv');
+
+  const skills = (data["skills"] || [])
+    .map(skill => typeof skill === 'string' ? skill : skill.name || JSON.stringify(skill))
+    .join(", ");
+
+  const experience = (data["experience"] || [])
+    .map(exp => typeof exp === 'string' ? exp : exp.position || exp.title || JSON.stringify(exp))
+    .join(", ");
+
   infoBox.innerHTML = `
-    <h2>${data.name}</h2>
-    <p>Email: ${data.email}</p>
-    <p>Experience: ${data.experience}</p>
-    <p>${(data["skills"]).join(", ")}</p>
+    <h2>${data.name || 'No name found'}</h2>
+    <p>Email: ${data.email || 'null'}</p>
+    <p>Experience: ${experience}</p>
+    <p>Skills: ${skills}</p>
   `;
 }
 
